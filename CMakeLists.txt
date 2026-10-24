@@ -1,0 +1,63 @@
+cmake_minimum_required(VERSION 3.20)
+project(wcso VERSION 1.0.0 LANGUAGES C CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+option(WCSO_WITH_TETWILD "Build the optional fTetWild surface input adapter (requires GMP)" OFF)
+option(WCSO_WITH_OPENMP "Parallelize independent element assembly" ON)
+option(WCSO_BUILD_TESTS "Build numerical and integration tests" ON)
+set(WCSO_DEPENDENCIES_FILE "" CACHE FILEPATH "Optional externally maintained dependency targets")
+if(WCSO_DEPENDENCIES_FILE)
+  include("${WCSO_DEPENDENCIES_FILE}")
+else()
+  include(cmake/Dependencies.cmake)
+endif()
+add_library(wcso_core STATIC
+  src/core/Config.cpp src/mesh/TetMesh.cpp src/mesh/MeshIO.cpp
+  src/fem/Elasticity.cpp src/fem/ProjectedSolver.cpp
+  src/analysis/WorstCaseLoad.cpp src/energy/Energies.cpp
+  src/energy/SelfIntersection.cpp src/optim/BilevelSolver.cpp
+  src/remesh/MeshImprove.cpp src/remesh/Tetrahedralize.cpp)
+target_include_directories(wcso_core PUBLIC include)
+target_link_libraries(wcso_core PUBLIC Eigen3::Eigen nlohmann_json::nlohmann_json
+  PRIVATE wcso_spectra wcso_amgcl igl::core ipc::toolkit wcso_mmg)
+target_compile_definitions(wcso_core PRIVATE AMGCL_NO_BOOST NOMINMAX EIGEN_MPL2_ONLY)
+if(WCSO_WITH_TETWILD)
+  target_link_libraries(wcso_core PRIVATE FloatTetwild)
+  target_compile_definitions(wcso_core PRIVATE WCSO_WITH_TETWILD=1)
+endif()
+if(WCSO_WITH_OPENMP)
+  find_package(OpenMP QUIET)
+  if(OpenMP_CXX_FOUND)
+    target_link_libraries(wcso_core PUBLIC OpenMP::OpenMP_CXX)
+  endif()
+endif()
+if(MSVC)
+  target_compile_options(wcso_core PRIVATE /W4 /permissive- /bigobj /utf-8)
+else()
+  target_compile_options(wcso_core PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+add_executable(wcso apps/wcso.cpp)
+target_link_libraries(wcso PRIVATE wcso_core)
+if(WCSO_BUILD_TESTS)
+  enable_testing()
+  add_executable(wcso_tests tests/numerics.cpp)
+  target_link_libraries(wcso_tests PRIVATE wcso_core)
+  add_test(NAME numerics COMMAND wcso_tests)
+  find_package(Python3 COMPONENTS Interpreter)
+  if(Python3_FOUND)
+    add_test(NAME integration COMMAND "${Python3_EXECUTABLE}"
+      "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration.py" "$<TARGET_FILE:wcso>"
+      "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/test-output")
+    add_test(NAME source_hygiene COMMAND "${Python3_EXECUTABLE}"
+      "${CMAKE_CURRENT_SOURCE_DIR}/scripts/check_source.py")
+    if(WCSO_WITH_TETWILD)
+      add_test(NAME surface_input COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/surface_input.py" "$<TARGET_FILE:wcso>"
+        "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/test-output")
+      set_tests_properties(surface_input PROPERTIES TIMEOUT 1000)
+    endif()
+  endif()
+endif()
+install(TARGETS wcso RUNTIME DESTINATION bin)

@@ -1,0 +1,31 @@
+name: build-and-test
+on: [push, pull_request]
+jobs:
+  core:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, macos-14, windows-2022]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install cmake==3.27.9 ninja clang-format==23.1.3
+      - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DWCSO_WITH_OPENMP=OFF
+      - run: cmake --build build --config Release --target wcso wcso_tests -j 3
+      - run: ctest --test-dir build -C Release --output-on-failure
+      - run: python scripts/check_source.py --format
+  surface:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: sudo apt-get update && sudo apt-get install -y libgmp-dev
+      - run: python -m pip install cmake==3.27.9 ninja
+      - run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DWCSO_WITH_TETWILD=ON
+      - run: cmake --build build --target wcso wcso_tests -j 3
+      - run: ctest --test-dir build --output-on-failure

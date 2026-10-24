@@ -1,0 +1,8 @@
+{
+  "outer_iterations": 2,
+  "inner_iterations": 2,
+  "sampling_density": 100,
+  "remesh": false,
+  "seed": 17,
+  "threads": 1
+}

@@ -1,0 +1,370 @@
+{
+  "verified_at": "2026-10-21",
+  "material": {
+    "parameterization": "Lame",
+    "lambda": 1.0,
+    "mu": 0.3
+  },
+  "release_readiness": "Source candidate for review and testing. Three selected main-method runs completed on two frozen versions; not complete three-model validation of the current executable, not literal manuscript/PDF equivalence, and not a bug-free guarantee.",
+  "full_three_model_lame_experiments": {
+    "state": "selected_runs_completed_two_versions",
+    "original_lame_rerun": {
+      "directory": "outputs/paper-experiments-lame-rerun",
+      "failure_source_attribution": {
+        "source_snapshot": "provenance/source.zip",
+        "source_snapshot_sha256": "a132cd3b10c3c613e3b9fea8ea68f98b489ce108ec74009861af8db0247cb1b5",
+        "executable_sha256": "b38f9885364b100c412eb23c49f35907ee070c07df9cfda9bb819566735dbf2c",
+        "version": "Frozen Lamé build before the MMG boundary correction"
+      },
+      "leaf": {
+        "state": "failed",
+        "exit_code": 1,
+        "last_completed_outer": 14,
+        "last_recorded_outer": 15,
+        "last_recorded_inner": 2,
+        "remesh_rollback_count": 8,
+        "remesh_rollback_outer_iterations": [
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14
+        ],
+        "observed_termination": "Linear solve did not converge.",
+        "final_analysis_available": false
+      },
+      "rocking_chair": {
+        "state": "completed",
+        "exit_code": 0,
+        "completed_outer": 121,
+        "termination": "eta_limit",
+        "final_analysis_available": true,
+        "version": "Frozen pre-MMG-boundary-correction executable"
+      },
+      "plane": {
+        "state": "completed",
+        "exit_code": 0,
+        "completed_outer": 43,
+        "termination": "eta_limit",
+        "final_analysis_available": true,
+        "version": "Frozen pre-MMG-boundary-correction executable"
+      }
+    },
+    "confirmed_remeshing_bug": "Exact boundary-coordinate comparison rejected valid machine-roundoff changes in MMG. Corrected and regression tested on Windows/WSL; actual outer-14 remesh accepted; a fresh full leaf run completed. The old failed run remains excluded.",
+    "mmg_round_trip_diagnosis": {
+      "input": "Actual leaf outer-14 checkpoint, frozen mmg3d.dll",
+      "boundary_vertices_before_and_after": 2830,
+      "boundary_topology": "Identical under a bijective nearest-vertex mapping",
+      "changed_coordinate_entries": 1454,
+      "maximum_boundary_displacement": 1.249000902703301e-16,
+      "quality_before": 0.042314374738294976,
+      "quality_after_exact_boundary_restore": 0.23944070154826996,
+      "orientations_after_exact_boundary_restore": "All positive",
+      "cpp_checkpoint_acceptance": {
+        "local_evidence": "work/leaf-diagnostics/mmg_boundary_leaf_outer14_cpp.json",
+        "exit_code": 0,
+        "event": "remesh_accepted",
+        "exact_boundary_coordinates_and_triangles": true,
+        "rest_vertices_equal_vertices": true,
+        "positive_volumes": true,
+        "minimum_volume": 5.8350893766187475e-09,
+        "quality_before": 0.04231437473829487,
+        "quality_after": 0.2394407015482699,
+        "vertices_before": 3665,
+        "vertices_after": 3596,
+        "tets_before": 12349,
+        "tets_after": 11953,
+        "production_ipc_intersection_check_executed": true
+      },
+      "regression_tests": {
+        "windows_core": "3/3 passed",
+        "windows_optional": "4/4 passed",
+        "wsl_core": "3/3 passed"
+      }
+    },
+    "linear_solver_diagnosis": {
+      "local_evidence": "work/leaf-diagnostics/linear_failure.json",
+      "failure_context": "Stress adjoint",
+      "method": "gcr",
+      "iterations": 3000,
+      "iteration_limit": 3000,
+      "recursive_relative_residual": 1.4951426002254798e-06,
+      "true_projected_relative_residual": 1.4951461511833808e-06,
+      "tolerance": 1e-08,
+      "rhs_norm": 0.0883146662722424,
+      "assessment": "Genuine iteration-budget exhaustion; no early false convergence observed.",
+      "source_change": "Higher-precision diagnostics implemented and regression tests passed; no numerical solver algorithm change."
+    },
+    "excluded_history": "Old E/nu results and interrupted Lamé attempts are not completed validation of this version.",
+    "unified_current_version_three_model_validation": false,
+    "report_directory": "outputs/paper-experiments-lame-final",
+    "stress_source": "Terminal final_analysis after recomputing critical load; maximum absolute principal stress, boundary/all scopes separate, normalized analysis units.",
+    "selected_runs": [
+      {
+        "model": "rocking_chair",
+        "label": "摇椅",
+        "version": "pre-MMG-boundary-fix",
+        "exit_code": 0,
+        "initial_vertices": 7276,
+        "initial_tets": 28155,
+        "initial_boundary_face_tets": 9160,
+        "final_vertices": 7276,
+        "final_tets": 28155,
+        "final_boundary_face_tets": 9160,
+        "E_hd": 4.115879165118439e-07,
+        "E_lds": 46.01807227712908,
+        "all_stress_reduction_percent": 79.28916153063498,
+        "boundary_stress_reduction_percent": 82.13682725061341,
+        "completed_outer": 121,
+        "initial_all_stress": 116340.88432278752,
+        "initial_boundary_stress": 116340.88432278752,
+        "max_all_stress": 24095.172625923333,
+        "max_boundary_stress": 20782.173144743556,
+        "min_quality": 0.4772693331467773,
+        "seconds": 19310.1113525,
+        "sigma_bar": 27566.039202472897,
+        "termination": "eta_limit",
+        "final_eta": 0.99375,
+        "attempted_steps": 605,
+        "accepted_steps": 605,
+        "phase2_steps": 268,
+        "eta_relaxations": 4,
+        "remesh_accepted": 0,
+        "remesh_rolled_back": 0,
+        "below_quality_trigger_tets": 0,
+        "min_signed_volume": 1.510047344571355e-08,
+        "status_wall_seconds": 19314.335876199882,
+        "datetime_wall_seconds": 19314.612938,
+        "started_at_utc": "2026-10-21T08:07:26.100636+00:00",
+        "finished_at_utc": "2026-10-21T13:29:20.713574+00:00",
+        "peak_working_set_MiB": 834.1484375,
+        "executable_sha256": "b38f9885364b100c412eb23c49f35907ee070c07df9cfda9bb819566735dbf2c",
+        "source_zip_sha256": "a132cd3b10c3c613e3b9fea8ea68f98b489ce108ec74009861af8db0247cb1b5",
+        "input_sha256": "c3a6092e02d2e817888f0ec99e3bcae3c3c08cbf5c8b1438538e450f671c5efb",
+        "config_sha256": "009c038f302c07fc14c768c984f07e49c9ce2a03b0e7108f54910d55acfad153",
+        "directory": "outputs/paper-experiments-lame-rerun"
+      },
+      {
+        "model": "leaf",
+        "label": "叶片",
+        "version": "MMG-boundary-fix",
+        "exit_code": 0,
+        "initial_vertices": 3665,
+        "initial_tets": 12349,
+        "initial_boundary_face_tets": 5660,
+        "final_vertices": 3596,
+        "final_tets": 11958,
+        "final_boundary_face_tets": 5660,
+        "E_hd": 5.983062696727485e-08,
+        "E_lds": 106.17371617338809,
+        "all_stress_reduction_percent": 97.5138781580243,
+        "boundary_stress_reduction_percent": 97.5138781580243,
+        "completed_outer": 31,
+        "initial_all_stress": 5641885.332253164,
+        "initial_boundary_stress": 5641885.332253164,
+        "max_all_stress": 140264.14354436964,
+        "max_boundary_stress": 140264.14354436964,
+        "min_quality": 0.18653005154764501,
+        "seconds": 2322.0536543,
+        "sigma_bar": 140264.9628566427,
+        "termination": "eta_limit",
+        "final_eta": 0.99375,
+        "attempted_steps": 155,
+        "accepted_steps": 155,
+        "phase2_steps": 38,
+        "eta_relaxations": 4,
+        "remesh_accepted": 1,
+        "remesh_rolled_back": 0,
+        "below_quality_trigger_tets": 0,
+        "min_signed_volume": 9.155821945772956e-09,
+        "status_wall_seconds": 2322.7067661001347,
+        "datetime_wall_seconds": 2322.810049,
+        "started_at_utc": "2026-10-21T08:59:46.737424+00:00",
+        "finished_at_utc": "2026-10-21T09:38:29.547473+00:00",
+        "peak_working_set_MiB": 474.19921875,
+        "executable_sha256": "a2f89e1b3e782d70ade8f24e3a18440a4d3a8d34ca1d9a77e1dc57cced093d93",
+        "source_zip_sha256": "4fc59c8aaa637066f6fc9ea6e8c18fbc6ef196d6a4eeb853e59b9836684f2154",
+        "input_sha256": "ef2ef01bd9a81a2d3f15fee2f933a16d6746ce8e215237ea7dfcfe5c4fb3a013",
+        "config_sha256": "009c038f302c07fc14c768c984f07e49c9ce2a03b0e7108f54910d55acfad153",
+        "directory": "outputs/paper-experiments-lame-leaf-remesh-fix"
+      },
+      {
+        "model": "plane",
+        "label": "飞机",
+        "version": "pre-MMG-boundary-fix",
+        "exit_code": 0,
+        "initial_vertices": 5830,
+        "initial_tets": 24181,
+        "initial_boundary_face_tets": 6354,
+        "final_vertices": 5830,
+        "final_tets": 24181,
+        "final_boundary_face_tets": 6354,
+        "E_hd": 5.793199256170182e-08,
+        "E_lds": 33.85807755969475,
+        "all_stress_reduction_percent": 34.451895396698184,
+        "boundary_stress_reduction_percent": 73.57386869895961,
+        "completed_outer": 43,
+        "initial_all_stress": 5092355.121484816,
+        "initial_boundary_stress": 4148801.534622943,
+        "max_all_stress": 3337942.2618024647,
+        "max_boundary_stress": 1096367.7409590376,
+        "min_quality": 0.08390472973911992,
+        "seconds": 7518.2502493,
+        "sigma_bar": 1096368.2505973163,
+        "termination": "eta_limit",
+        "final_eta": 0.99375,
+        "attempted_steps": 215,
+        "accepted_steps": 215,
+        "phase2_steps": 97,
+        "eta_relaxations": 4,
+        "remesh_accepted": 0,
+        "remesh_rolled_back": 1,
+        "below_quality_trigger_tets": 1,
+        "min_signed_volume": 6.844238076271325e-09,
+        "status_wall_seconds": 7520.026748499833,
+        "datetime_wall_seconds": 7520.107461,
+        "started_at_utc": "2026-10-21T08:07:26.183807+00:00",
+        "finished_at_utc": "2026-10-21T10:12:46.291268+00:00",
+        "peak_working_set_MiB": 716.0,
+        "executable_sha256": "b38f9885364b100c412eb23c49f35907ee070c07df9cfda9bb819566735dbf2c",
+        "source_zip_sha256": "a132cd3b10c3c613e3b9fea8ea68f98b489ce108ec74009861af8db0247cb1b5",
+        "input_sha256": "cf25f54c3d056616e046c5b6fde27253d94135b1dbfee594e62813c65e447205",
+        "config_sha256": "009c038f302c07fc14c768c984f07e49c9ce2a03b0e7108f54910d55acfad153",
+        "directory": "outputs/paper-experiments-lame-rerun"
+      }
+    ],
+    "completed_leaf_recovery": {
+      "directory": "outputs/paper-experiments-lame-leaf-remesh-fix",
+      "state": "completed",
+      "exit_code": 0,
+      "input": "Original leaf mesh",
+      "numerical_configuration": "Identical to the failed formal run; no tolerance or iteration-budget relaxation",
+      "started_at_utc": "2026-10-21T08:59:46.737424+00:00",
+      "finished_at_utc": "2026-10-21T09:38:29.547473+00:00",
+      "completed_outer": 31,
+      "termination": "eta_limit",
+      "final_analysis_available": true,
+      "executable_sha256": "a2f89e1b3e782d70ade8f24e3a18440a4d3a8d34ca1d9a77e1dc57cced093d93",
+      "frozen_source_zip_sha256": "4fc59c8aaa637066f6fc9ea6e8c18fbc6ef196d6a4eeb853e59b9836684f2154"
+    },
+    "quality_limit": "All selected final tets have positive volume; plane has one tet with quality 0.08390472973912012 below the 0.1 remeshing trigger. The trigger is not a hard terminal guarantee. The old binary's rejected plane remesh has no established specific cause.",
+    "performance_limit": "Overlapping runs include diagnosis, compilation, tests and a fresh leaf rerun on i7-13700KF/32 GB; two frozen versions, not a controlled same-version three-task benchmark.",
+    "remaining_limits": [
+      "Current corrected executable has not completed full chair and plane reruns.",
+      "Retained manuscript differences: current-K 1e7 penalty, three-candidate compliance selection, MMG mesh improvement and Spectra backend.",
+      "No other-paper baselines, ablations, quadratic-FEM comparison or physical experiments in this round.",
+      "No per-bug isolated-commit equivalence table; optional surface pipeline remains default OFF and requires GMP.",
+      "macOS, hosted CI and optional Linux surface build were not executed here."
+    ]
+  },
+  "numerics": {
+    "cg_relative_residual": 1.37041e-15,
+    "gcr_relative_residual": 9.30026e-16,
+    "directional_gradient_relative_errors": {
+      "E_ss_minimized": 1.71632e-05,
+      "E_ss_fixed": 2.30758e-08,
+      "E_ef": 1.04014e-09,
+      "E_hd": 8.60255e-11,
+      "E_lds": 1.48177e-08,
+      "E_si": 9.69024e-08
+    },
+    "source_hygiene_and_clang_format_23_1_3": "passed"
+  },
+  "original_zip_sha256": "F7F463A41D5630F09CB10DA32FBF0D9DA9D501AC69539061ADAC3CB7C51CF824",
+  "original_snapshot_configured_run": {
+    "exit_code": 0,
+    "seconds": 932.4703464508057,
+    "completed_two_outer": true,
+    "evidence_scope": "Historical old snapshot configured two-outer run; not equivalent defaults or a controlled performance comparison."
+  },
+  "chair": {
+    "seed": 20260926,
+    "outer_iterations": 2,
+    "inner_iterations": 5,
+    "initial_analysis": {
+      "all_tets": 28155,
+      "boundary_tets": 9160,
+      "compliances": [
+        [
+          104909.67085399367
+        ],
+        [
+          1340428.0550631364
+        ],
+        [
+          1508871.2896864954
+        ]
+      ],
+      "eigen_backward_errors": [
+        [
+          7.841765766915788e-18
+        ],
+        [
+          1.733217441490012e-17
+        ],
+        [
+          1.836121879580244e-17
+        ]
+      ],
+      "eigenvalues": [
+        [
+          44.36609858596562
+        ],
+        [
+          47.96086755357854
+        ],
+        [
+          49.323768825707816
+        ]
+      ],
+      "lambda_max": 0.2341546754511211,
+      "max_all_stress": 116340.88711164815,
+      "max_boundary_stress": 116340.88711164815,
+      "penalty": 2341546.754511211,
+      "selected": 2,
+      "sigma_bar": 116341.54410843531,
+      "stress_energy": -204065.9231753995
+    },
+    "final_analysis": {
+      "E_hd": 3.140194985607878e-09,
+      "E_lds": 43.146838281319916,
+      "all_stress_reduction_percent": 27.275756034189634,
+      "boundary_stress_reduction_percent": 27.275756034189634,
+      "completed_outer": 2,
+      "initial_all_stress": 116340.88711164815,
+      "initial_boundary_stress": 116340.88711164815,
+      "max_all_stress": 84608.03057506302,
+      "max_boundary_stress": 84608.03057506302,
+      "min_quality": 0.4970138002594819,
+      "seconds": 395.206174,
+      "sigma_bar": 84608.78449490789,
+      "termination": "outer_iteration_limit"
+    },
+    "boundary_stress_reduction_percent": 27.275756034189634,
+    "all_stress_reduction_percent": 27.275756034189634,
+    "evidence_scope": "Historical limited two-outer Lamé test of the earlier build; not the full selected chair run."
+  },
+  "smoke": {
+    "wall_seconds": 0.1512998000252992,
+    "peak_working_set_MiB": 16.71875,
+    "summary": {
+      "E_hd": 1.1256229068187538e-05,
+      "E_lds": 106.80252633970132,
+      "all_stress_reduction_percent": 44.19221998507046,
+      "boundary_stress_reduction_percent": 44.19221998507046,
+      "completed_outer": 2,
+      "initial_all_stress": 889.5834092727271,
+      "initial_boundary_stress": 889.5834092727271,
+      "max_all_stress": 496.45675209623386,
+      "max_boundary_stress": 496.45675209623386,
+      "min_quality": 0.3243480135376922,
+      "seconds": 0.1145678,
+      "sigma_bar": 499.8765583160266,
+      "termination": "outer_iteration_limit"
+    }
+  },
+  "completion_documented_at_utc": "2026-10-21T13:52:08.241057+00:00"
+}
